@@ -6,68 +6,46 @@
 	<title></title>
 	<link rel="stylesheet" href="">
 	<style>
-		.on{color:red;}
+		.wrap{position: fixed;bottom: 40px;left: 0;}
+		.hd{width: 30px;height: 30px;background: #f00;position: absolute;top: 0;left: 0;}
+		.bd{width: 100%;height:30px;position: absolute;top:0;background: green;}
 	</style>
 </head>
 <body>
 	<div class="wrap">
 	    <div class="hd">
-	        <span>1</span>
-	        <span>2</span>
-	        <span>3</span>
+	        
 	    </div>
 	    <div class="bd">
-	        <div>a</div>
-	        <div>b</div>
-	        <div>c</div>
+	        <span class="close">关闭</span>
 	    </div>
 	</div>
 	<script src="https://cdn.bootcss.com/jquery/1.8.3/jquery.min.js"></script>
 	<script>
-		(function ($) {
-            $.fn.tab = function (opt) {
-                var defaultSettings = {
-                    'active': 'on',
-                    'tit': '.hd',
-                    'con': '.bd',
-                    'event': 'mouseover',
-                    'start': 0
-                };
-                var settings = $.extend({}, defaultSettings, opt);
-                this.each(function () {
-                    var oTit = $(this).children(settings.tit);
-                    var oCon = $(this).children(settings.con);
-                    var timer = null;
-                    //默认显示
-                    oTit.children().eq(settings.start).addClass(settings.active).siblings().removeClass(settings.active);
-                    oCon.children().eq(settings.start).show().siblings().hide();
-                    //绑定事件
-                    oTit.children().bind(settings.event, function () {
-                        var $this = $(this);
-                        if (settings.event == 'mouseover') {//延迟切换
-                            timer = setTimeout(function () {
-                                $this.addClass(settings.active).siblings().removeClass(settings.active);
-                                oCon.children().hide();
-                                oCon.children().eq($this.index()).show();
-                            }, 200);
-                        } else {
-                            $(this).addClass(settings.active).siblings().removeClass(settings.active);
-                            oCon.children().hide();
-                            oCon.children().eq($(this).index()).show();
-                        }
-                    });
-                    if (settings.event == 'mouseover') {
-                        oTit.children().bind('mouseleave', function () {
-                            clearTimeout(timer);
-                        });
-                    }
-                });
-
-            }
-        })(jQuery);
         $(function(){
-        	$('.wrap').tab({
-        		start:1
+        	var nBodyW = $('body').width();
+        	$('.wrap').find('.bd').css({
+        		'width':nBodyW,
+        		'left':-nBodyW
+        	});
+        	var nW = $('.hd').width();
+        	$('.hd').on('mouseover',function(){
+        		$(this).animate({
+        			left:-nW+'px'
+        		},300,function(){
+        			$('.bd').animate({
+        				left:0
+        			},300);
+        		})
+        	});
+        	$('.close').on('click',function(){
+        		$(this).parents('.bd').animate({
+        			left:-nBodyW+'px'
+        		},300,function(){
+        			$('.hd').animate({
+        				left:0
+        			},300);
+        		})
         	});
         })
 	</script>
