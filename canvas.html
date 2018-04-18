@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
-	<link rel="stylesheet" href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="">
 </head>
+
 <body>
-	<canvas id="a" width="300" height="150" style="border:1px solid #ccc">
-		<img src="https://fms.ipinyou.com/5/0E/72/D5/F001Nl1QjCCP0016gLxd.jpg" id='hh'>
-	</canvas>
-	
+    <div id="d1">
+        <canvas id="canvas"></canvas>
+    </div>
     <script>
-	   window.onload=function(){
-	   	var a = document.getElementById('a');
-	   	var ctx = a.getContext('2d');
+    window.onload = function() {
+        function Circle() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height;
+            this.r = Math.random() * 10;
+            //绘制圆形
+            this.paint = function() {
+                context.beginPath();
+                context.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                context.fillStyle = "white";
+                context.globalAlpha = 0.5;
+                context.fill();
+            }
+            //控制圆形移动
+            this.step = function() {
+                this.y--;
+            }
+        }
+        var circles = [];
 
-	   	ctx.fillStyle='#f00';
-	   	ctx.fillRect(30,30,60,30);
+        function createCircles() {
+            var circle = new Circle();
+            circles[circles.length] = circle;
+        }
 
-	   	ctx.moveTo(30,30);
-	   	ctx.lineTo(90,60);
-	   	ctx.stroke();
+        function paintCircles() {
+            for (var i = 0; i < circles.length; i++) {
+                circles[i].paint();
+            }
+        }
 
-	   	ctx.beginPath();
-	   	ctx.arc(90,60,30,1*Math.PI,2*Math.PI);
-	   	ctx.stroke();
-
-	   	ctx.font='30px Arial';
-	   	//ctx.fillText('HW',90,60);
-	   	ctx.strokeText('HW',90,60);
-
-	   	var grd = ctx.createLinearGradient(0,0,200,200);
-	   	grd.addColorStop(0,'#f00');
-	   	grd.addColorStop(1,'#fff');
-	   	ctx.fillStyle=grd;
-	   	ctx.fillRect(90,60,60,60);
-
-	   	var grd2 = ctx.createRadialGradient(195,105,10,195,105,40);
-	   	grd2.addColorStop(0,'#f00');
-	   	grd2.addColorStop(1,'#fff');
-	   	ctx.fillStyle=grd2;
-	   	ctx.fillRect(150,60,90,90);
-
-	   	var img = document.getElementById('hh');
-	   	ctx.drawImage(img,200,100);
-
-	   }
-	    
+        function stepCircles() {
+            for (var i = 0; i < circles.length; i++) {
+                circles[i].step();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var myimg = new Image();
+        myimg.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524624350&di=a9ec85098645d1f3b384fc549e940e24&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F5882b2b7d0a20cf4b1d42c0b7c094b36adaf999a.jpg";
+        var timer = "";
+        setInterval(function() {
+            context.drawImage(myimg, 0, 0);
+            timer++;
+            if (timer % 20 == 0) {
+                createCircles();
+            }
+            paintCircles();
+            stepCircles();
+        }, 10);
+    }
     </script>
 </body>
+
 </html>
