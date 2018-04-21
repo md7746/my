@@ -9,28 +9,54 @@
 </head>
 
 <body>
-    <canvas id="q"></canvas>
-    <script type="text/javascript">
-    window.onload = function() {
-        var q = document.getElementById('q');
-        var width = q.width = document.documentElement.clientWidth;
-        var height = q.height = document.documentElement.clientHeight;
-        var letters = Array(256).join(1).split('');
-        var ctx = q.getContext('2d');
-        var draw = function() {
-            ctx.fillStyle = 'rgba(0,0,0,.05)';
-            ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = '#0F0';
-            letters.map(function(y_pos, index) {
-                text = String.fromCharCode(65 + Math.random() * 26);
-                x_pos = index * 10;
-                ctx.fillText(text, x_pos, y_pos);
-                // y_pos = Number(y_pos)
-                letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
-            });
-        };
-        setInterval(draw, 33);
+    <canvas id="canvas" style="background-color:black">您的浏览器暂不支持canvas</canvas>
+    <script>
+    var canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var ctx = canvas.getContext("2d");
+    var balls = [];
+
+    function draw(ball) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#ffffff";
+        ctx.shadowBlur = 20;
+        ctx.fill();
     }
+
+    function star() {
+        for (var i = 0; i < 1; i++) {
+            var ball = {
+                x: Math.random() * canvas.width,
+                y: 0,
+                r: Math.random() * 4,
+                vx: Math.random() - 0.5,
+                vy: Math.random() + 1,
+            }
+            balls.push(ball);
+        }
+        drawball();
+    }
+
+    function drawball() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < balls.length; i++) {
+            balls[i].x += balls[i].vx * 5; //改变x轴位置
+            balls[i].y += balls[i].vy * 2; //Y轴
+            balls[i].index = i;
+            if (balls[i].y > canvas.height) {
+                balls.splice(balls[i].index, 1);
+                continue;
+            }
+            draw(balls[i]);
+        }
+    }
+    setInterval(function() {
+        star();
+    }, 10);
     </script>
 </body>
 
