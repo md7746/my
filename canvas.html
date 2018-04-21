@@ -9,62 +9,27 @@
 </head>
 
 <body>
-    <div id="d1">
-        <canvas id="canvas"></canvas>
-    </div>
-    <script>
+    <canvas id="q"></canvas>
+    <script type="text/javascript">
     window.onload = function() {
-        function Circle() {
-            this.x = Math.random() * canvas.width;
-            this.y = canvas.height;
-            this.r = Math.random() * 10;
-            //绘制圆形
-            this.paint = function() {
-                context.beginPath();
-                context.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                context.fillStyle = "white";
-                context.globalAlpha = 0.5;
-                context.fill();
-            }
-            //控制圆形移动
-            this.step = function() {
-                this.y--;
-            }
-        }
-        var circles = [];
-
-        function createCircles() {
-            var circle = new Circle();
-            circles[circles.length] = circle;
-        }
-
-        function paintCircles() {
-            for (var i = 0; i < circles.length; i++) {
-                circles[i].paint();
-            }
-        }
-
-        function stepCircles() {
-            for (var i = 0; i < circles.length; i++) {
-                circles[i].step();
-            }
-        }
-        var canvas = document.getElementById("canvas");
-        var context = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        var myimg = new Image();
-        myimg.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524624350&di=a9ec85098645d1f3b384fc549e940e24&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F5882b2b7d0a20cf4b1d42c0b7c094b36adaf999a.jpg";
-        var timer = "";
-        setInterval(function() {
-            context.drawImage(myimg, 0, 0);
-            timer++;
-            if (timer % 20 == 0) {
-                createCircles();
-            }
-            paintCircles();
-            stepCircles();
-        }, 10);
+        var q = document.getElementById('q');
+        var width = q.width = document.documentElement.clientWidth;
+        var height = q.height = document.documentElement.clientHeight;
+        var letters = Array(256).join(1).split('');
+        var ctx = q.getContext('2d');
+        var draw = function() {
+            ctx.fillStyle = 'rgba(0,0,0,.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = '#0F0';
+            letters.map(function(y_pos, index) {
+                text = String.fromCharCode(65 + Math.random() * 26);
+                x_pos = index * 10;
+                ctx.fillText(text, x_pos, y_pos);
+                // y_pos = Number(y_pos)
+                letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
+            });
+        };
+        setInterval(draw, 33);
     }
     </script>
 </body>
